@@ -28,11 +28,9 @@ export default function DinosaurioDetail({ params }) {
     if (params?.id) {
       api.get(`/Dinosaurios/${params.id}`)
         .then(response => {
-          // Extraemos los datos: probamos si vienen en .data o directamente en la respuesta
           const dataSegura = response.data?.data || response.data;
           setDino(dataSegura);
           setLoading(false);
-          console.log("Datos recibidos:", dataSegura); // Útil para verificar en consola F12
         })
         .catch((err) => {
           console.error("Error al cargar:", err);
@@ -50,9 +48,7 @@ export default function DinosaurioDetail({ params }) {
   const descripcionFinal = dino.descripcion || dino.Descripcion || descripcionesLocales[nombreLimpio] || "Descripción técnica en proceso de actualización.";
 
   const getPeriodoNombre = () => {
-    // Intentamos obtener el ID de varias formas posibles que puede enviar la API
     const id = dino.PeriodoId;
-    
     switch(String(id)) {
       case '1': return 'Triásico';
       case '2': return 'Jurásico';
@@ -70,41 +66,62 @@ export default function DinosaurioDetail({ params }) {
   };
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '1rem', marginBottom: '4rem' }}>
+    <div style={{ maxWidth: '900px', margin: '2rem auto', padding: '1rem', marginBottom: '4rem' }}>
       <Link href="/dinosaurios">
         <button style={{ marginBottom: '1.5rem', padding: '0.6rem 1.2rem', cursor: 'pointer', backgroundColor: '#990000', color: 'white', border: '1px solid #fbd000', borderRadius: '4px', fontWeight: 'bold' }}>
           ← Volver al Catálogo
         </button>
       </Link>
 
-      <div style={{ backgroundColor: '#111518', padding: '3rem', borderRadius: '8px', borderTop: '5px solid #fbd000', display: 'flex', gap: '3rem', flexWrap: 'wrap', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>
-        <div style={{ flex: '1 1 350px' }}>
-          <img 
-            src={imagenUrl} 
-            alt={nombre}
-            onError={(e) => e.target.src = 'https://via.placeholder.com/400x400/000/fbd000?text=Datos+Clasificados'}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', border: '2px solid #333' }}
-          />
+      {/* FICHA */}
+      <div style={{ backgroundColor: '#111518', borderRadius: '10px', border: '2px solid #fbd000', boxShadow: '0 0 30px rgba(251,208,0,0.15)', overflow: 'hidden' }}>
+        
+        {/* Cabecera de la ficha */}
+        <div style={{ backgroundColor: '#fbd000', padding: '0.8rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontWeight: 'bold', color: '#111', fontSize: '0.85rem', letterSpacing: '2px' }}>ARCHIVO PALEONTOLÓGICO — ESPÉCIMEN CLASIFICADO</span>
+          <span style={{ fontWeight: 'bold', color: '#111', fontSize: '0.85rem' }}>ID: #{params?.id}</span>
         </div>
 
-        <div style={{ flex: '1 1 400px' }}>
-          <h2 style={{ color: '#fbd000', fontSize: '3rem', margin: '0 0 1rem 0', textTransform: 'uppercase', letterSpacing: '2px' }}>{nombre}</h2>
-          <p style={{ color: '#ccc', fontSize: '1.2rem', fontStyle: 'italic', marginBottom: '2rem', lineHeight: '1.6' }}>"{descripcionFinal}"</p>
+        <div style={{ display: 'flex', gap: '2rem', padding: '2rem', flexWrap: 'wrap' }}>
+          
+          {/* Imagen */}
+          <div style={{ flex: '1 1 300px' }}>
+            <img
+              src={imagenUrl}
+              alt={nombre}
+              onError={(e) => e.target.src = 'https://via.placeholder.com/400x300/000/fbd000?text=Imagen+no+disponible'}
+              style={{ width: '100%', height: '300px', objectFit: 'cover', borderRadius: '8px', border: '2px solid #333' }}
+            />
+          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', backgroundColor: 'rgba(255,255,255,0.05)', padding: '1.5rem', borderRadius: '8px' }}>
-            <div>
-              <span style={{ color: '#00ffcc', fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>PERIODO:</span>
-              <div style={{ fontSize: '1.3rem', color: '#fff' }}>{getPeriodoNombre()}</div>
-            </div>
-            <div>
-              <span style={{ color: '#00ffcc', fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>DIETA:</span>
-              <div style={{ fontSize: '1.3rem', color: '#fff' }}>{getDietaNombre()}</div>
-            </div>
-            <div>
-              <span style={{ color: '#00ffcc', fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>PESO:</span>
-              <div style={{ fontSize: '1.3rem', color: '#fff' }}>{dino.peso || dino.Peso || "N/A"} kg</div>
+          {/* Info */}
+          <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <h2 style={{ color: '#fbd000', fontSize: '2.2rem', margin: 0, textTransform: 'uppercase', letterSpacing: '2px' }}>{nombre}</h2>
+            <p style={{ color: '#aaa', fontSize: '1rem', fontStyle: 'italic', lineHeight: '1.6', margin: 0 }}>{descripcionFinal}</p>
+
+            {/* Datos en tabla tipo ficha */}
+            <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '8px', overflow: 'hidden', border: '1px solid #333' }}>
+              {[
+                { label: '🦕 PERÍODO', value: getPeriodoNombre() },
+                { label: '🥩 DIETA', value: getDietaNombre() },
+                { label: '⚖️ PESO', value: `${dino.peso || dino.Peso || 'N/A'} kg` },
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', borderBottom: i < 2 ? '1px solid #333' : 'none' }}>
+                  <div style={{ backgroundColor: 'rgba(251,208,0,0.1)', padding: '0.8rem 1rem', minWidth: '140px', color: '#00ffcc', fontWeight: 'bold', fontSize: '0.85rem' }}>
+                    {item.label}
+                  </div>
+                  <div style={{ padding: '0.8rem 1rem', color: '#fff', fontSize: '1rem' }}>
+                    {item.value}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
+
+        {/* Pie de ficha */}
+        <div style={{ backgroundColor: 'rgba(255,255,255,0.03)', borderTop: '1px solid #333', padding: '0.8rem 1.5rem', textAlign: 'center' }}>
+          <span style={{ color: '#555', fontSize: '0.8rem', letterSpacing: '1px' }}>LEGADO MESOZOICO ARGENTINO — REGISTRO PALEONTOLÓGICO OFICIAL</span>
         </div>
       </div>
     </div>
