@@ -1,0 +1,78 @@
+/* 1. Importamos la fuente */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  /* Paleta extraída de tu imagen */
+  --bg-pergamino: #b4a382;     /* Fondo base tipo papel */
+  --azul-pizarra: #3b5768;    /* Color para letras y bordes */
+  --hover-azul: #2c424f;      /* Tono un poco más oscuro para estados hover */
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-pergamino);
+  color: var(--azul-pizarra);
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* 2. Header (Sin fondo oscuro, estilo limpio) */
+header {
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  padding: 1.5rem 0;
+  text-align: center;
+}
+
+h1 {
+  color: var(--azul-pizarra);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* 3. Navegación */
+nav a {
+  color: var(--azul-pizarra);
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  margin: 0 1rem;
+  transition: all 0.2s ease;
+}
+
+nav a:hover {
+  color: var(--hover-azul);
+}
+
+/* 4. Botón Cerrar Sesión (Borde definido como en tu foto) */
+button {
+  background: transparent !important;
+  border: 2px solid var(--azul-pizarra) !important;
+  color: var(--azul-pizarra) !important;
+  font-family: 'Orbitron', sans-serif !important;
+  font-weight: 700;
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background: rgba(59, 87, 104, 0.1) !important;
+}
+
+/* 5. Títulos del catálogo */
+h2 {
+  color: var(--azul-pizarra);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 3rem;
+}
+
+/* 6. Fondos (Sin gradientes oscuros para mantener el estilo pergamino) */
+.fondo-login, .fondo-inicio, .fondo-catalogo {
+  background-color: var(--bg-pergamino);
+  background-image: none; /* Quitamos el gradiente negro */
+}
